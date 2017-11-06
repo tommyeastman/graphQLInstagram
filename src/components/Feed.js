@@ -8,21 +8,21 @@ import { graphql, compose } from 'react-apollo'
  * - Displays descriptions of all posts
  * - User can create a new post in the form
  * - User can delete post by clicking trash icon
- * Post requires imageUrl and description. Both are handled through state.
- * Use static imageUrl and take description from form input.
- * 
+ * User edits post description in form, which updates the state live.
+ * Once submitted, the createPost mutation is called to create the post.
+ * If the delete icon is clicked, the deletePost mutation is called. 
  */
 
 class Feed extends Component {
   constructor(props) {
     super(props)
-    this.state = { desc: '', image: 'http://oi47.tinypic.com/i6bmf9.jpg' }
+    this.state = { desc: '' }
   }
 
   onPostSubmit(event) {
     event.preventDefault()
     this.props.createPost({
-      variables: { desc: this.state.desc, image: this.state.image },
+      variables: { desc: this.state.desc },
       refetchQueries: [{ query: fetchPosts }]
     })
     this.setState({ desc: '' })
@@ -83,11 +83,10 @@ class Feed extends Component {
  * Mutations
  */
 const createPost = gql`
-  mutation createPost($desc: String!, $image: String!) {
-    createPost(description: $desc, imageUrl: $image) {
+  mutation createPost($desc: String!) {
+    createPost(description: $desc) {
       id
       description
-      imageUrl
     }
   }
 `
@@ -106,7 +105,6 @@ const fetchPosts = gql`
     allPosts {
       id
       description
-      imageUrl
     }
   }
 `
