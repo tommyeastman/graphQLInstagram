@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import logo from '../logo.svg'
 import gql from 'graphql-tag'
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 
 class Feed extends Component {
   constructor(props) {
@@ -12,7 +12,7 @@ class Feed extends Component {
   onPostSubmit(event) {
     //prevent default form behavior
     event.preventDefault()
-    this.props.mutate({
+    this.props.createPost({
       variables: { desc: this.state.desc, image: this.state.image },
       refetchQueries: [{ query: fetchPosts }]
     })
@@ -37,8 +37,9 @@ class Feed extends Component {
   }
 
   deletePost(id) {
-    this.props.mutate({
-      variables: { id }
+    this.props.deletePost({
+      variables: { id },
+      refetchQueries: [{ query: fetchPosts }]
     })
   }
 
@@ -97,4 +98,8 @@ const fetchPosts = gql`
     }
   }
 `
-export default graphql(createPost, deletePost)(graphql(fetchPosts)(Feed))
+export default compose(
+  graphql(createPost, { name: 'createPost' }),
+  graphql(deletePost, { name: 'deletePost' }),
+  graphql(fetchPosts)
+)(Feed)
