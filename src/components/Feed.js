@@ -3,6 +3,16 @@ import logo from '../logo.svg'
 import gql from 'graphql-tag'
 import { graphql, compose } from 'react-apollo'
 
+/**
+ * Feed Component
+ * - Displays descriptions of all posts
+ * - User can create a new post in the form
+ * - User can delete post by clicking trash icon
+ * Post requires imageUrl and description. Both are handled through state.
+ * Use static imageUrl and take description from form input.
+ * 
+ */
+
 class Feed extends Component {
   constructor(props) {
     super(props)
@@ -10,7 +20,6 @@ class Feed extends Component {
   }
 
   onPostSubmit(event) {
-    //prevent default form behavior
     event.preventDefault()
     this.props.createPost({
       variables: { desc: this.state.desc, image: this.state.image },
@@ -19,8 +28,14 @@ class Feed extends Component {
     this.setState({ desc: '' })
   }
 
+  deletePost(id) {
+    this.props.deletePost({
+      variables: { id },
+      refetchQueries: [{ query: fetchPosts }]
+    })
+  }
+
   renderPosts() {
-    //console.log(this.props.data)
     return this.props.data.allPosts.map(post => {
       return (
         <li key={post.id} className='collection-item'>
@@ -36,13 +51,6 @@ class Feed extends Component {
     })
   }
 
-  deletePost(id) {
-    this.props.deletePost({
-      variables: { id },
-      refetchQueries: [{ query: fetchPosts }]
-    })
-  }
-
   render() {
     if (this.props.data.loading) {
       return <div>Loading</div>
@@ -51,7 +59,6 @@ class Feed extends Component {
       <div className='App'>
         <header className='App-header'>
           <img src={logo} className='App-logo' alt='logo' />
-          <h1 className='App-title'>Feed</h1>
         </header>
         <div className='container'>
           <p className='App-intro'>This is the feed</p>
@@ -72,6 +79,9 @@ class Feed extends Component {
   }
 }
 
+/**
+ * Mutations
+ */
 const createPost = gql`
   mutation createPost($desc: String!, $image: String!) {
     createPost(description: $desc, imageUrl: $image) {
@@ -88,7 +98,9 @@ const deletePost = gql`
     }
   }
 `
-
+/**
+ * Queries
+ */
 const fetchPosts = gql`
   {
     allPosts {
@@ -98,6 +110,9 @@ const fetchPosts = gql`
     }
   }
 `
+
+//Compose function allows multiple mutations per component.
+//Need to name mutations, these names are passed as props
 export default compose(
   graphql(createPost, { name: 'createPost' }),
   graphql(deletePost, { name: 'deletePost' }),
