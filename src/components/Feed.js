@@ -9,7 +9,7 @@ class Feed extends Component {
     this.state = { desc: '', image: 'http://oi47.tinypic.com/i6bmf9.jpg' }
   }
 
-  onSubmit(event) {
+  onPostSubmit(event) {
     //prevent default form behavior
     event.preventDefault()
     this.props.mutate({
@@ -19,14 +19,21 @@ class Feed extends Component {
     this.setState({ desc: '' })
   }
 
-  showPosts() {
+  renderPosts() {
     //console.log(this.props.data)
     return this.props.data.allPosts.map(post => {
       return (
-        <li key={post.id}>
-          <p>{post.description}</p>
+        <li key={post.id} className='collection-item'>
+          {post.description}
+          <i className='material-icons'>delete</i>
         </li>
       )
+    })
+  }
+
+  deletePost(id) {
+    this.props.mutate({
+      variables: { id }
     })
   }
 
@@ -40,18 +47,20 @@ class Feed extends Component {
           <img src={logo} className='App-logo' alt='logo' />
           <h1 className='App-title'>Feed</h1>
         </header>
-        <p className='App-intro'>This is the feed</p>
-        <div>
-          <ul>{this.showPosts()}</ul>
+        <div className='container'>
+          <p className='App-intro'>This is the feed</p>
+          <div>
+            <ul className='collection'>{this.renderPosts()}</ul>
+          </div>
+          <h3>Create a new post</h3>
+          <form onSubmit={this.onPostSubmit.bind(this)}>
+            <label>Post Content:</label>
+            <input
+              value={this.state.desc}
+              onChange={event => this.setState({ desc: event.target.value })}
+            />
+          </form>
         </div>
-        <h3>Create a new post</h3>
-        <form onSubmit={this.onSubmit.bind(this)}>
-          <label>Post Content:</label>
-          <input
-            value={this.state.desc}
-            onChange={event => this.setState({ desc: event.target.value })}
-          />
-        </form>
       </div>
     )
   }
@@ -66,6 +75,14 @@ const createPost = gql`
     }
   }
 `
+const deletePost = gql`
+  mutation deletePost($id: ID!) {
+    deletePost(id: $id) {
+      id
+    }
+  }
+`
+
 const fetchPosts = gql`
   {
     allPosts {
@@ -75,4 +92,4 @@ const fetchPosts = gql`
     }
   }
 `
-export default graphql(createPost)(graphql(fetchPosts)(Feed))
+export default graphql(createPost, deletePost)(graphql(fetchPosts)(Feed))

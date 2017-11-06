@@ -1,0 +1,18 @@
+.collection-item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.material-icons {
+  cursor: pointer;
+  margin-right: 5;
+}
+
+.material-icons:hover {
+  color: "#d3ecff";
+}
+
+.vote-box {
+  display: flex;
+  align-items: center;
+}

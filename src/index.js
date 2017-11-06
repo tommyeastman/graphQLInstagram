@@ -7,7 +7,7 @@ import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import Feed from './components/Feed'
 
-import './index.css'
+import './style.css'
 import './App.css'
 
 const httpLink = new HttpLink({
