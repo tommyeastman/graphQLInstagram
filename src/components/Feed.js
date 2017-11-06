@@ -13,7 +13,8 @@ class Feed extends Component {
     //prevent default form behavior
     event.preventDefault()
     this.props.mutate({
-      variables: { desc: this.state.desc }
+      variables: { desc: this.state.desc, image: this.state.image },
+      refetchQueries: [{ query: fetchPosts }]
     })
     this.setState({ desc: '' })
   }
@@ -56,20 +57,22 @@ class Feed extends Component {
   }
 }
 
-const mutation = gql`
+const createPost = gql`
   mutation createPost($desc: String!, $image: String!) {
     createPost(description: $desc, imageUrl: $image) {
       id
       description
+      imageUrl
     }
   }
 `
-const query = gql`
+const fetchPosts = gql`
   {
     allPosts {
       id
       description
+      imageUrl
     }
   }
 `
-export default graphql(mutation)(graphql(query)(Feed))
+export default graphql(createPost)(graphql(fetchPosts)(Feed))
