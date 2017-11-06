@@ -13,7 +13,7 @@ class Feed extends Component {
     //prevent default form behavior
     event.preventDefault()
     this.props.mutate({
-      variables: { desc: this.state.desc, image: this.state.image }
+      variables: { desc: this.state.desc }
     })
     this.setState({ desc: '' })
   }
@@ -60,6 +60,7 @@ const mutation = gql`
   mutation createPost($desc: String!, $image: String!) {
     createPost(description: $desc, imageUrl: $image) {
       id
+      description
     }
   }
 `
@@ -68,7 +69,6 @@ const query = gql`
     allPosts {
       id
       description
-      imageUrl
     }
   }
 `
