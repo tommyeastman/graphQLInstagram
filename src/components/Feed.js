@@ -18,7 +18,21 @@ class Feed extends Component {
     this.setState({ desc: '' })
   }
 
+  showPosts() {
+    //console.log(this.props.data)
+    return this.props.data.allPosts.map(post => {
+      return (
+        <li key={post.id}>
+          <p>{post.description}</p>
+        </li>
+      )
+    })
+  }
+
   render() {
+    if (this.props.data.loading) {
+      return <div>Loading</div>
+    }
     return (
       <div className='App'>
         <header className='App-header'>
@@ -26,6 +40,9 @@ class Feed extends Component {
           <h1 className='App-title'>Feed</h1>
         </header>
         <p className='App-intro'>This is the feed</p>
+        <div>
+          <ul>{this.showPosts()}</ul>
+        </div>
         <h3>Create a new post</h3>
         <form onSubmit={this.onSubmit.bind(this)}>
           <label>Post Content:</label>
@@ -46,5 +63,13 @@ const mutation = gql`
     }
   }
 `
-
-export default graphql(mutation)(Feed)
+const query = gql`
+  {
+    allPosts {
+      id
+      description
+      imageUrl
+    }
+  }
+`
+export default graphql(mutation)(graphql(query)(Feed))
