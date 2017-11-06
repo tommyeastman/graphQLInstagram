@@ -25,7 +25,12 @@ class Feed extends Component {
       return (
         <li key={post.id} className='collection-item'>
           {post.description}
-          <i className='material-icons'>delete</i>
+          <i
+            className='material-icons'
+            onClick={() => this.deletePost(post.id)}
+          >
+            delete
+          </i>
         </li>
       )
     })
