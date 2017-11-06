@@ -20,6 +20,10 @@ class Feed extends Component {
     this.state = { desc: '', loading: false }
   }
 
+  componentWillMount() {
+    console.log('mounting :)')
+  }
+
   onPostSubmit(event) {
     event.preventDefault()
     this.setState({ loading: true })
@@ -31,6 +35,7 @@ class Feed extends Component {
   }
 
   deletePost(id) {
+    console.log('deleted')
     this.props.deletePost({
       variables: { id },
       refetchQueries: [{ query: fetchPosts }]
