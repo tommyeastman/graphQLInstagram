@@ -61,11 +61,11 @@ class Feed extends Component {
           <img src={logo} className='App-logo' alt='logo' />
         </header>
         <div className='container'>
-          <p className='App-intro'>This is the feed</p>
+          <h3>Feed</h3>
           <div>
             <ul className='collection'>{this.renderPosts()}</ul>
           </div>
-          <h3>Create a new post</h3>
+          <h4>Create a new post</h4>
           <form onSubmit={this.onPostSubmit.bind(this)}>
             <label>Post Content:</label>
             <input
