@@ -1,10 +1,13 @@
-import React, { Component } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
+import { BrowserRouter, Route } from 'react-router-dom'
 import { ApolloProvider } from 'react-apollo'
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import logo from './logo.svg'
+import App from './App'
+import Feed from './components/Feed'
+
 import './index.css'
 import './App.css'
 
@@ -20,13 +23,9 @@ const client = new ApolloClient({
 const Root = () => {
   return (
     <ApolloProvider client={client}>
-      <div className='App'>
-        <header className='App-header'>
-          <img src={logo} className='App-logo' alt='logo' />
-          <h1 className='App-title'>Welcome to React</h1>
-        </header>
-        <p className='App-intro'>Yoooooo</p>
-      </div>
+      <BrowserRouter>
+        <Route path='/' component={Feed} />
+      </BrowserRouter>
     </ApolloProvider>
   )
 }
