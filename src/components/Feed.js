@@ -6,16 +6,16 @@ import { graphql } from 'react-apollo'
 class Feed extends Component {
   constructor(props) {
     super(props)
-    this.state = { content: '' }
+    this.state = { desc: '', image: 'http://oi47.tinypic.com/i6bmf9.jpg' }
   }
 
   onSubmit(event) {
     //prevent default form behavior
-    // event.preventDefault()
-    // this.props.mutate({
-    //   variables: { content: this.state.content }
-    // })
-    console.log(this.state.content)
+    event.preventDefault()
+    this.props.mutate({
+      variables: { desc: this.state.desc, image: this.state.image }
+    })
+    this.setState({ desc: '' })
   }
 
   render() {
@@ -30,8 +30,8 @@ class Feed extends Component {
         <form onSubmit={this.onSubmit.bind(this)}>
           <label>Post Content:</label>
           <input
-            value={this.state.content}
-            onChange={event => this.setState({ content: event.target.value })}
+            value={this.state.desc}
+            onChange={event => this.setState({ desc: event.target.value })}
           />
         </form>
       </div>
@@ -40,13 +40,11 @@ class Feed extends Component {
 }
 
 const mutation = gql`
-  mutation AddSong($content: String) {
-    addSong(content: $content) {
+  mutation createPost($desc: String!, $image: String!) {
+    createPost(description: $desc, imageUrl: $image) {
       id
-      content
     }
   }
 `
 
-//export default graphql(mutation)(Feed)
-export default Feed
+export default graphql(mutation)(Feed)
