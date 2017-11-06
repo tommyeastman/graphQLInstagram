@@ -17,16 +17,11 @@ import Spinner from 'react-spinkit'
 class Feed extends Component {
   constructor(props) {
     super(props)
-    this.state = { desc: '', loading: false }
-  }
-
-  componentWillMount() {
-    console.log('mounting :)')
+    this.state = { desc: '' }
   }
 
   onPostSubmit(event) {
     event.preventDefault()
-    this.setState({ loading: true })
     this.props.createPost({
       variables: { desc: this.state.desc },
       refetchQueries: [{ query: fetchPosts }]
@@ -59,7 +54,7 @@ class Feed extends Component {
   }
 
   render() {
-    if (this.props.data.loading || this.state.loading) {
+    if (this.props.data.loading) {
       return <Spinner name='double-bounce' />
     }
     return (

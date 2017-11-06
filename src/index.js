@@ -28,7 +28,5 @@ const Root = () => {
     </ApolloProvider>
   )
 }
-//import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render(<Root />, document.querySelector('#root'))
-//registerServiceWorker();
