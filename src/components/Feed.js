@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import logo from '../logo.svg'
 import gql from 'graphql-tag'
 import { graphql, compose } from 'react-apollo'
+import Spinner from 'react-spinkit'
 
 /**
  * Feed Component
@@ -53,7 +54,7 @@ class Feed extends Component {
 
   render() {
     if (this.props.data.loading) {
-      return <div>Loading</div>
+      return <Spinner name='double-bounce' />
     }
     return (
       <div className='App'>
